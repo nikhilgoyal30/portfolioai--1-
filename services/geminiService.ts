@@ -3,14 +3,14 @@ import { GoogleGenAI, GenerateContentResponse, Chat } from "@google/genai";
 import { GEMINI_MODEL_TEXT, GEMINI_MODEL_IMAGE } from '../constants';
 
 // Ensure API_KEY is available. In a real app, this would be more robustly managed.
-const API_KEY = process.env.API_KEY;
+const NEXT_PUBLIC_API_KEY = process.env.API_KEY;
 
-if (!API_KEY) {
+if (!NEXT_PUBLIC_API_KEY) {
   console.error("Gemini API Key is not configured. Please set the API_KEY environment variable.");
   // Potentially throw an error or use a mock implementation if key is essential for app to run
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY || "MISSING_API_KEY" }); // Provide a fallback to prevent crash if key is missing
+const ai = new GoogleGenAI({ apiKey: NEXT_PUBLIC_API_KEY || "MISSING_API_KEY" }); // Provide a fallback to prevent crash if key is missing
 
 /**
  * Generates text content using the Gemini API.
@@ -19,7 +19,7 @@ const ai = new GoogleGenAI({ apiKey: API_KEY || "MISSING_API_KEY" }); // Provide
  * @returns The generated text.
  */
 export const generateText = async (prompt: string, systemInstruction?: string): Promise<string> => {
-  if (!API_KEY) return "API Key not configured. Cannot connect to Gemini.";
+  if (!NEXT_PUBLIC_API_KEY) return "API Key not configured. Cannot connect to Gemini.";
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
       model: GEMINI_MODEL_TEXT,
@@ -43,7 +43,7 @@ export const generateText = async (prompt: string, systemInstruction?: string): 
  * @returns The parsed JSON object or array.
  */
 export const generateJson = async <T,>(prompt: string, systemInstruction?: string): Promise<T | null> => {
-  if (!API_KEY) {
+  if (!NEXT_PUBLIC_API_KEY) {
     console.error("API Key not configured. Cannot connect to Gemini for JSON generation.");
     return null;
   }
@@ -83,7 +83,7 @@ export const generateJson = async <T,>(prompt: string, systemInstruction?: strin
  * @returns Array of base64 encoded image strings.
  */
 export const generateImages = async (prompt: string, numberOfImages: number = 1): Promise<string[]> => {
-  if (!API_KEY) return ["API Key not configured. Cannot generate images."];
+  if (!NEXT_PUBLIC_API_KEY) return ["API Key not configured. Cannot generate images."];
   try {
     const response = await ai.models.generateImages({
         model: GEMINI_MODEL_IMAGE,
@@ -106,7 +106,7 @@ let chatInstance: Chat | null = null;
  * @returns The chat instance.
  */
 const getChat = (systemInstruction?: string): Chat => {
-  if (!API_KEY) {
+  if (!NEXT_PUBLIC_API_KEY) {
     throw new Error("API Key not configured. Cannot initialize chat.");
   }
   // For simplicity, this example re-creates chat if systemInstruction changes or if not initialized.
@@ -129,7 +129,7 @@ const getChat = (systemInstruction?: string): Chat => {
  * @returns The chat response text.
  */
 export const sendChatMessage = async (message: string, systemInstruction?: string): Promise<string> => {
-  if (!API_KEY) return "API Key not configured. Cannot send chat message.";
+  if (!NEXT_PUBLIC_API_KEY) return "API Key not configured. Cannot send chat message.";
   try {
     const chat = getChat(systemInstruction);
     const response: GenerateContentResponse = await chat.sendMessage({ message });
@@ -146,7 +146,7 @@ export const sendChatMessage = async (message: string, systemInstruction?: strin
  * @returns The generated text and grounding metadata.
  */
 export const generateTextWithGoogleSearch = async (prompt: string): Promise<{ text: string; sources: any[] }> => {
-  if (!API_KEY) return { text: "API Key not configured. Cannot connect to Gemini.", sources: [] };
+  if (!NEXT_PUBLIC_API_KEY) return { text: "API Key not configured. Cannot connect to Gemini.", sources: [] };
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
       model: GEMINI_MODEL_TEXT,
@@ -172,7 +172,7 @@ export const sendChatMessageStream = async (
   onChunk: (chunkText: string) => void,
   systemInstruction?: string
 ): Promise<void> => {
-  if (!API_KEY) {
+  if (!NEXT_PUBLIC_API_KEY) {
     onChunk("API Key not configured. Cannot send chat message.");
     return;
   }
