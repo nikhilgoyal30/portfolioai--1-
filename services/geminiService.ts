@@ -107,7 +107,7 @@ let chatInstance: Chat | null = null;
  */
 const getChat = (systemInstruction?: string): Chat => {
   if (!NEXT_PUBLIC_API_KEY) {
-    throw new Error("API Key not configured. Cannot initialize chat.");
+    throw new Error("API Key not configured. Cannot initialize chat");
   }
   // For simplicity, this example re-creates chat if systemInstruction changes or if not initialized.
   // A more robust app might manage multiple chat instances or update existing ones.
