@@ -3,7 +3,7 @@ import { GoogleGenAI, GenerateContentResponse, Chat } from "@google/genai";
 import { GEMINI_MODEL_TEXT, GEMINI_MODEL_IMAGE } from '../constants';
 
 // Ensure API_KEY is available. In a real app, this would be more robustly managed.
-const NEXT_PUBLIC_API_KEY = process.env.API_KEY;
+const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
 if (!NEXT_PUBLIC_API_KEY) {
   console.error("Gemini API Key is not configured. Please set the API_KEY environment variable.");
